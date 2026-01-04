@@ -1,0 +1,49 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container">
+    <h1 class="text-center mb-4">Smart Search</h1>
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Advanced Recipe Search</h5>
+                    <form action="{{ url_for('main.search') }}" method="get">
+                        <div class="form-group">
+                            <label for="q">Search by title, ingredients, or tags:</label>
+                            <input type="text" class="form-control" id="q" name="q" placeholder="e.g., chicken, pasta, italian">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="cuisine">Cuisine:</label>
+                                <select class="form-control" id="cuisine" name="cuisine">
+                                    <option value="">All Cuisines</option>
+                                    <option value="Italian">Italian</option>
+                                    <option value="Chinese">Chinese</option>
+                                    <option value="Mexican">Mexican</option>
+                                    <option value="Indian">Indian</option>
+                                    <option value="Greek">Greek</option>
+                                    <option value="Japanese">Japanese</option>
+                                    <option value="Korean">Korean</option>
+                                    <option value="African">African</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="difficulty">Difficulty:</label>
+                                <select class="form-control" id="difficulty" name="difficulty">
+                                    <option value="">All Levels</option>
+                                    <option value="Easy">Easy</option>
+                                    <option value="Medium">Medium</option>
+                                    <option value="Hard">Hard</option>
+                                    <option value="Expert">Expert</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">Search Recipes</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

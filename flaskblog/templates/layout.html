@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
+
+    {% if title %}
+        <title>Bonnyrigg Cooking Blog - {{ title }}</title>
+    {% else %}
+        <title>Bonnyrigg Cooking Blog</title>
+    {% endif %}
+</head>
+<body>
+    <header class="site-header">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-steel fixed-top">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="/">
+            <i class="fas fa-utensils text-warning me-2"></i>
+            Bonnyrigg Cooking Blog
+          </a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarToggle">
+            <div class="navbar-nav me-auto">
+              <a class="nav-item nav-link" href="{{ url_for('main.home') }}">Home</a>
+              <a class="nav-item nav-link" href="{{ url_for('main.recipes') }}">Recipes</a>
+              <a class="nav-item nav-link" href="{{ url_for('main.smart_search') }}">Smart Search</a>
+              <a class="nav-item nav-link" href="{{ url_for('main.cultures') }}">Cultures</a>
+              <a class="nav-item nav-link" href="{{ url_for('main.challenges') }}">Challenges</a>
+              <a class="nav-item nav-link" href="{{ url_for('main.blog') }}">Blog</a>
+              {% if current_user.is_authenticated %}
+                <a class="nav-item nav-link" href="{{ url_for('main.community') }}">Community</a>
+              {% endif %}
+              {% if current_user.is_authenticated and current_user.username == 'admin' %}
+                <a class="nav-item nav-link" href="{{ url_for('main.admin') }}">Admin</a>
+              {% endif %}
+            </div>
+            <div class="d-flex align-items-center">
+              <form class="d-flex me-3" action="{{ url_for('main.search') }}" method="get">
+                <input class="form-control me-2" type="search" placeholder="Search recipes..." aria-label="Search" name="q" style="min-width: 200px;">
+                <button class="btn btn-outline-light" type="submit">Search</button>
+              </form>
+              <div class="navbar-nav me-3">
+                {% if current_user.is_authenticated %}
+                  <a class="nav-item nav-link" href="{{ url_for('posts.new_post') }}">New Post</a>
+                  <a class="nav-item nav-link" href="{{ url_for('users.account') }}">Account</a>
+                  <a class="nav-item nav-link" href="{{ url_for('users.logout') }}">Logout</a>
+                {% else %}
+                  <a class="nav-item nav-link" href="{{ url_for('users.login') }}">Login</a>
+                  <a class="nav-item nav-link" href="{{ url_for('users.register') }}">Register</a>
+                {% endif %}
+              </div>
+              <!-- Bonnyrigg High School Logo -->
+              <div class="school-logo ms-3">
+                <img src="{{ url_for('static', filename='bonnyrigg_logo.png') }}" alt="Bonnyrigg High School Logo" class="rounded-circle border border-white">
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <!-- Credit Popup -->
+    <div id="credit-popup" class="credit-popup">
+      <div class="credit-content">
+        <button class="credit-close" onclick="closeCreditPopup()">&times;</button>
+        <div class="credit-text">
+          <strong>This website was made by:</strong><br>
+          Cristo, Nattapong, and Ayden
+        </div>
+      </div>
+    </div>
+
+    <main role="main" class="container">
+      <div class="row">
+        <div class="col-md-12">
+          {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+              {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                  {{ message }}
+                </div>
+              {% endfor %}
+            {% endif %}
+          {% endwith %}
+          {% block content %}{% endblock %}
+        </div>
+      </div>
+    </main>
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <!-- Credit Popup JavaScript -->
+    <script>
+        // Show credit popup when page loads
+        window.addEventListener('load', function() {
+            const popup = document.getElementById('credit-popup');
+            popup.style.display = 'block';
+        });
+
+        // Function to close credit popup
+        function closeCreditPopup() {
+            const popup = document.getElementById('credit-popup');
+            popup.style.display = 'none';
+        }
+    </script></body>
+</html>

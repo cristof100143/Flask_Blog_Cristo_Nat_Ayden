@@ -1,0 +1,44 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8">
+            <article>
+                <h1 class="mb-3">{{ blog_post.title }}</h1>
+                <p class="text-muted mb-4">By {{ blog_post.author.username }} • {{ blog_post.date_posted.strftime('%B %d, %Y') }}</p>
+                <div class="blog-content">
+                    {{ blog_post.content | safe }}
+                </div>
+            </article>
+
+            <div class="mt-5">
+                <a href="{{ url_for('main.blog') }}" class="btn btn-outline-primary">← Back to Blog</a>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Quick Tips</h5>
+                    <ul class="list-unstyled">
+                        <li>🍳 Always taste as you cook</li>
+                        <li>🧂 Season in layers</li>
+                        <li>🔥 Rest meat before cutting</li>
+                        <li>🧊 Keep ingredients cold until needed</li>
+                        <li>📏 Measure accurately</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Popular Articles</h5>
+                    <ul class="list-unstyled">
+                        {% for post in blog_posts %}
+                        <li><a href="{{ url_for('main.blog_post', blog_id=post.id) }}">{{ post.title }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

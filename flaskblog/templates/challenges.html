@@ -1,0 +1,52 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container">
+    <h1 class="text-center mb-4">Cooking Challenges</h1>
+    <p class="text-center mb-5">Test your culinary skills with our exciting cooking challenges! From quick 30-minute meals to elaborate multi-course dinners.</p>
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">30-Minute Challenge</h5>
+                    <p class="card-text">Create a delicious meal using only 30 minutes from start to finish. Perfect for busy weeknights!</p>
+                    <span class="badge badge-success">Easy to Expert</span>
+                    <p class="mt-2">Prize: Recipe featured on homepage</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Vegan Week Challenge</h5>
+                    <p class="card-text">Go vegan for a week and share your favorite plant-based recipes. Discover new ingredients and cooking techniques!</p>
+                    <span class="badge badge-warning">Medium</span>
+                    <p class="mt-2">Prize: Custom recipe book</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Fusion Cuisine</h5>
+                    <p class="card-text">Combine two different cuisines to create something unique and delicious. Think Mexican-Italian or Asian fusion!</p>
+                    <span class="badge badge-danger">Hard</span>
+                    <p class="mt-2">Prize: Professional photo shoot</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Zero Waste Cooking</h5>
+                    <p class="card-text">Minimize food waste by using every part of your ingredients. Get creative with vegetable scraps and leftovers!</p>
+                    <span class="badge badge-info">Medium</span>
+                    <p class="mt-2">Prize: Eco-friendly kitchen gadgets</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="text-center mt-4">
+        <p>Want to participate? <a href="{{ url_for('posts.new_post') }}">Submit your challenge recipe</a> and tag it with the challenge name!</p>
+    </div>
+</div>
+{% endblock content %}

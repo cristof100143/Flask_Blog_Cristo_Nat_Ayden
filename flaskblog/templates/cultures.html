@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container">
+    <h1 class="text-center mb-4">Explore World Cuisines</h1>
+    <p class="text-center mb-5">Discover authentic recipes from different cultures around the world. From Italian pasta to Korean kimchi, explore the rich diversity of global cuisine.</p>
+    <div class="row">
+        {% for cuisine in cuisines %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body text-center">
+                    <h5 class="card-title">{{ cuisine }}</h5>
+                    <p class="card-text">Explore delicious {{ cuisine.lower() }} recipes shared by our community.</p>
+                    <a href="{{ url_for('main.search', cuisine=cuisine) }}" class="btn btn-primary">View {{ cuisine }} Recipes</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock content %}

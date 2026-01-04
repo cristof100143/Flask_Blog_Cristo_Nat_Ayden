@@ -1,0 +1,64 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container">
+    <h1 class="text-center mb-4">Admin Dashboard</h1>
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">Total Users</h5>
+                    <h2 class="text-primary">{{ users_count }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">Total Recipes</h5>
+                    <h2 class="text-success">{{ posts_count }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">Total Comments</h5>
+                    <h2 class="text-info">{{ comments_count }}</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Recent Recipes</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        {% for post in posts.items[:5] %}
+                        <li class="list-group-item">
+                            <strong>{{ post.title }}</strong> by {{ post.author.username }}
+                            <br><small class="text-muted">{{ post.date_posted.strftime('%Y-%m-%d') }}</small>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Admin Actions</h5>
+                </div>
+                <div class="card-body">
+                    <a href="{{ url_for('main.home') }}" class="btn btn-primary btn-block mb-2">View Homepage</a>
+                    <a href="{{ url_for('posts.new_post') }}" class="btn btn-success btn-block mb-2">Add New Recipe</a>
+                    <a href="{{ url_for('main.recipes') }}" class="btn btn-info btn-block mb-2">Manage Recipes</a>
+                    <button class="btn btn-warning btn-block" disabled>Export Data (Coming Soon)</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

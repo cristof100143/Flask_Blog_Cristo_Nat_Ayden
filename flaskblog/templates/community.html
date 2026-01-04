@@ -1,0 +1,117 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8">
+            <h1 class="mb-4">Community Forum</h1>
+            <p class="text-muted mb-4">Connect with fellow Bonnyrigg food enthusiasts. Share tips, ask questions, and discuss all things culinary!</p>
+
+            <!-- New Post Form -->
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Start a New Discussion</h5>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="{{ url_for('main.new_community_post') }}">
+                        {{ form.hidden_tag() }}
+                        <div class="form-group">
+                            {{ form.title.label(class="form-control-label") }}
+                            {{ form.title(class="form-control") }}
+                        </div>
+                        <div class="form-group">
+                            {{ form.content.label(class="form-control-label") }}
+                            {{ form.content(class="form-control", rows=3) }}
+                        </div>
+                        <div class="form-group">
+                            {{ form.submit(class="btn btn-primary") }}
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Community Posts -->
+            {% for post in posts.items %}
+            <div class="card mb-3">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <h5 class="card-title mb-1">
+                            <a href="{{ url_for('main.community_post', post_id=post.id) }}" class="text-decoration-none">{{ post.title }}</a>
+                        </h5>
+                        <small class="text-muted">{{ post.date_posted.strftime('%b %d, %Y') }}</small>
+                    </div>
+                    <p class="card-text text-muted mb-2">By {{ post.author.username }}</p>
+                    <p class="card-text">{{ post.content[:200] }}{% if post.content|length > 200 %}...{% endif %}</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <a href="{{ url_for('main.community_post', post_id=post.id) }}" class="btn btn-outline-primary btn-sm">
+                            View Discussion ({{ post.replies|length }} replies)
+                        </a>
+                        <small class="text-muted">{{ post.replies|length }} replies</small>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+
+            <!-- Pagination -->
+            {% if posts.has_prev or posts.has_next %}
+            <nav aria-label="Community pagination">
+                <ul class="pagination justify-content-center">
+                    {% if posts.has_prev %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ url_for('main.community', page=posts.prev_num) }}">Previous</a>
+                    </li>
+                    {% endif %}
+
+                    {% for page_num in posts.iter_pages(left_edge=1, left_current=2, right_current=3, right_edge=1) %}
+                    {% if page_num %}
+                    <li class="page-item {% if page_num == posts.page %}active{% endif %}">
+                        <a class="page-link" href="{{ url_for('main.community', page=page_num) }}">{{ page_num }}</a>
+                    </li>
+                    {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link">...</span>
+                    </li>
+                    {% endif %}
+                    {% endfor %}
+
+                    {% if posts.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ url_for('main.community', page=posts.next_num) }}">Next</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Community Guidelines</h5>
+                    <ul class="list-unstyled small">
+                        <li class="mb-2">🍳 Share your cooking experiences</li>
+                        <li class="mb-2">🤝 Be respectful to fellow members</li>
+                        <li class="mb-2">📸 Post photos of your creations</li>
+                        <li class="mb-2">❓ Ask questions about recipes</li>
+                        <li class="mb-2">💡 Give and receive cooking tips</li>
+                        <li class="mb-0">🌟 Celebrate culinary successes!</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Recent Activity</h5>
+                    <div class="small text-muted">
+                        {% for post in posts.items[:5] %}
+                        <div class="mb-2">
+                            <strong>{{ post.author.username }}</strong> started a discussion<br>
+                            <small>{{ post.date_posted.strftime('%b %d') }}</small>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

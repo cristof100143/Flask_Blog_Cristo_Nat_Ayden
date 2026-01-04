@@ -1,0 +1,78 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container">
+    <h1 class="text-center mb-4">Cooking Blog</h1>
+    <p class="text-center mb-5">Tips, tricks, and insights from our culinary experts and community members.</p>
+    <div class="row">
+        <div class="col-md-8">
+            {% for blog_post in blog_posts.items %}
+            <article class="mb-5">
+                <h2><a href="{{ url_for('main.blog_post', blog_id=blog_post.id) }}" class="text-decoration-none">{{ blog_post.title }}</a></h2>
+                <p class="text-muted">By {{ blog_post.author.username }} • {{ blog_post.date_posted.strftime('%B %d, %Y') }}</p>
+                <div class="blog-content">
+                    {{ blog_post.content | safe }}
+                </div>
+                <div class="mt-3">
+                    <a href="{{ url_for('main.blog_post', blog_id=blog_post.id) }}" class="btn btn-primary">Read Full Article</a>
+                </div>
+            </article>
+            {% endfor %}
+
+            <!-- Pagination -->
+            {% if blog_posts.has_prev or blog_posts.has_next %}
+            <nav aria-label="Blog pagination">
+                <ul class="pagination justify-content-center">
+                    {% if blog_posts.has_prev %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ url_for('main.blog', page=blog_posts.prev_num) }}">Previous</a>
+                    </li>
+                    {% endif %}
+
+                    {% for page_num in blog_posts.iter_pages(left_edge=1, left_current=2, right_current=3, right_edge=1) %}
+                    {% if page_num %}
+                    <li class="page-item {% if page_num == blog_posts.page %}active{% endif %}">
+                        <a class="page-link" href="{{ url_for('main.blog', page=page_num) }}">{{ page_num }}</a>
+                    </li>
+                    {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link">...</span>
+                    </li>
+                    {% endif %}
+                    {% endfor %}
+
+                    {% if blog_posts.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ url_for('main.blog', page=blog_posts.next_num) }}">Next</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+        </div>
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Quick Tips</h5>
+                    <ul class="list-unstyled">
+                        <li>🍳 Always taste as you cook</li>
+                        <li>🧂 Season in layers</li>
+                        <li>🔥 Rest meat before cutting</li>
+                        <li>🧊 Keep ingredients cold until needed</li>
+                        <li>📏 Measure accurately</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Popular Articles</h5>
+                    <ul class="list-unstyled">
+                        {% for post in blog_posts.items[:4] %}
+                        <li><a href="{{ url_for('main.blog_post', blog_id=post.id) }}">{{ post.title }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

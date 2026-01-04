@@ -1,0 +1,104 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8">
+            <!-- Original Post -->
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h4 class="mb-0">{{ post.title }}</h4>
+                        <small>{{ post.date_posted.strftime('%B %d, %Y at %I:%M %p') }}</small>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="media mb-3">
+                        <img class="rounded-circle mr-3" src="{{ url_for('static', filename='profile_pics/' + post.author.image_file) }}" width="50" height="50">
+                        <div class="media-body">
+                            <h6 class="mt-0">{{ post.author.username }}</h6>
+                            <p class="mb-0">{{ post.content }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Replies -->
+            <h5 class="mb-3">{{ replies|length }} Replies</h5>
+            {% for reply in replies %}
+            <div class="card mb-3">
+                <div class="card-body">
+                    <div class="media">
+                        <img class="rounded-circle mr-3" src="{{ url_for('static', filename='profile_pics/' + reply.author.image_file) }}" width="40" height="40">
+                        <div class="media-body">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <h6 class="mt-0 mb-0">{{ reply.author.username }}</h6>
+                                <small class="text-muted">{{ reply.date_posted.strftime('%b %d, %Y at %I:%M %p') }}</small>
+                            </div>
+                            <p class="mb-0">{{ reply.content }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+
+            <!-- Reply Form -->
+            {% if current_user %}
+            <div class="card">
+                <div class="card-header bg-light">
+                    <h6 class="mb-0">Post a Reply</h6>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="{{ url_for('main.reply_community_post', post_id=post.id) }}">
+                        {{ form.hidden_tag() }}
+                        <div class="form-group">
+                            {{ form.content.label(class="form-control-label") }}
+                            {{ form.content(class="form-control", rows=3) }}
+                            {% if form.content.errors %}
+                                {% for error in form.content.errors %}
+                                    <small class="text-danger">{{ error }}</small>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            {{ form.submit(class="btn btn-primary") }}
+                        </div>
+                    </form>
+                </div>
+            </div>
+            {% else %}
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle"></i> <a href="{{ url_for('users.login') }}">Login</a> to join the discussion!
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Community Guidelines</h5>
+                    <ul class="list-unstyled small">
+                        <li class="mb-2">🍳 Share your cooking experiences</li>
+                        <li class="mb-2">🤝 Be respectful to fellow members</li>
+                        <li class="mb-2">📸 Post photos of your creations</li>
+                        <li class="mb-2">❓ Ask questions about recipes</li>
+                        <li class="mb-2">💡 Give and receive cooking tips</li>
+                        <li class="mb-0">🌟 Celebrate culinary successes!</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="{{ url_for('main.community') }}" class="text-decoration-none">← Back to Community</a></li>
+                        <li class="mb-2"><a href="{{ url_for('main.new_community_post') }}" class="text-decoration-none">Start New Discussion</a></li>
+                        <li class="mb-2"><a href="{{ url_for('main.recipes') }}" class="text-decoration-none">Browse Recipes</a></li>
+                        <li class="mb-0"><a href="{{ url_for('main.blog') }}" class="text-decoration-none">Read Blog</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
